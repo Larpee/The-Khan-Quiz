@@ -1,0 +1,35 @@
+#title {
+    width: 98%;
+    text-align: center;
+    font-size: 40;
+    font-family: Verdana;
+    background-color: orange;
+    padding: 10px;
+}
+
+#game-window {
+    float: left;
+    border: 2px solid gray;
+    width: 70%;
+    margin-bottom: 20px;
+    margin-top: 15px;
+    padding: 10px;
+    text-align: left;
+    font-family: Verdana
+}
+
+#game-title {
+    padding: 0px;
+    margin: 0px;
+    border-bottom: 2px dotted orange;
+    padding-bottom: 9px;
+}
+
+#game {
+    border: 5px groove orange;
+    width: 400px;
+    margin-left: 30%;
+    height: 400px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
