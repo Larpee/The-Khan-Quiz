@@ -1,3 +1,8 @@
+
+
+{
+
+
 //Some global variables
 var framesPassed;
 var currentScene = "menu";
@@ -43,7 +48,7 @@ Text.prototype.replace = function (textToRemove, textToAdd) {
     this.english = this.english.replace(textToRemove, textToAdd);
     this.spanish = this.spanish.replace(textToRemove, textToAdd);
     this.languages = [this.english, this.spanish];
-};
+};  
 }
 
 //Rect
@@ -85,8 +90,8 @@ Rect.prototype.draw = function() {
     }
     
     else if (this.textAlign === LEFT) {
-        this.text.x = this.x + 5;
-        this.text.y = this.y + this.height/2 + 5;
+        this.text.x = this.x + width/80;
+        this.text.y = this.y + this.height/2 + height/80;
     }
     
     this.text.draw();
@@ -100,9 +105,9 @@ Rect.prototype.isMouseInside = function () {
 //Button
 {
 var Button = function (config) {
-    this.width = config.width || 100;
-    this.height = config.height || 50;
-    this.x = config.x || 150;
+    this.width = config.width || width/4;
+    this.height = config.height || height/8;
+    this.x = config.x || 3/8 * width;
     this.y = config.y;
     this.text = new Text (config.text[0], config.text[1]);
     this.color = config.color || color(255, 0, 0);
@@ -222,20 +227,20 @@ var Question = function (subjectName, subject, question, correctAnswer, answer1,
     
     this.question = new Rect ({
         text: this.question,
-        x: 20,
-        y: 90,
+        x: width/20,
+        y: 9/40 * height,
         stroke: color(166, 166, 166),
         color: color(255, 255, 255),
-        width: 360,
-        height: 100,
+        width: 9/10 * width,
+        height: height/4,
         textSize: 11
     });
     
     this.subjectName = new Rect ({
-        x: 60,
-        y: 25,
-        width: 280,
-        height: 40,
+        x: 3/20 * width,
+        y: height/19,
+        width: 7/10 * width,
+        height: height/10,
         color: color(255, 255, 255),
         stroke: color(166, 166, 166),
         text: this.subjectName,
@@ -335,13 +340,13 @@ questions.sort(function () {return 0.5 - random();});
 ***********************************/
 //Menu Scene
 {
-var gameTitle = new Text("THE KHAN QUIZ:", "THE KHAN QUIZ:", 200, 95);
-var gameDescription = new Text ("TV SHOWS AND MOVIES", "Series y Películas", 200, 145);
+var gameTitle = new Text("THE KHAN QUIZ:", "THE KHAN QUIZ:", width/2, 19/80 * height);
+var gameDescription = new Text ("TV SHOWS AND MOVIES", "Series y Películas", width/2, 29/80 * height);
 
 var playButton = new Button ({
-    x: 30,
-    y: 235,
-    width: 160,
+    x: 3/40 * width,
+    y: 47/80 * height,
+    width: 2/5 * width,
     text: ["Play", "Jugar"],
     color: color(121, 255, 54),
     stroke: color(111, 181, 92),
@@ -353,9 +358,9 @@ var playButton = new Button ({
 });
 
 var rulesButton = new Button ({
-    x: 210,
-    width: 160,
-    y: 310,
+    x: 21/40 * width,
+    width: 2/5 * width,
+    y: 31/40 * height,
     text: ["How To Play", "Cómo Jugar"],
     color: color(121, 255, 54),
     stroke: color(111, 181, 92),
@@ -365,9 +370,9 @@ var rulesButton = new Button ({
 });
 
 var addQuestionSceneButton = new Button ({
-    y: 310,
-    x: 30,
-    width: 160,
+    y: 31/40 * height,
+    x: 3/40 * width,
+    width: 2/5 * width,
     text: ["Add Question", "Agregar Pregunta"],
     color: color(121, 255, 54),
     stroke: color(111, 181, 92),
@@ -377,9 +382,9 @@ var addQuestionSceneButton = new Button ({
 });
 
 var languageButton = new Button ({
-    y: 235,
-    x: 210,
-    width: 160,
+    y: 47/80 * height,
+    x: 21/40 * width,
+    width: 2/5 * width,
     text: ["Language", "Idioma"],
     color: color(121, 255, 54),
     stroke: color(111, 181, 92),
@@ -464,10 +469,10 @@ var questionButtons = [];
 
 for (var i = 0; i < questionStrings.length; i++) {
     questionButtons.push(new Button ({
-        x: 10,
-        y: 70 + i * 30,
-        width: 380,
-        height: 30,
+        x: width/40,
+        y: (7/40 + i * 3/40) * height,
+        width: 19/20 * width,
+        height: 3/40 * height,
         color: color(242, 242, 242),
         stroke: color(94, 94, 94),
         text: [questionStrings[i][0], questionStrings[i][1]],
@@ -490,13 +495,13 @@ questionButtons[3].action = function () {fieldToUpdate = 3;};
 questionButtons[4].action = function () {fieldToUpdate = 4;};
 }
 
-var explanationParagraph = new Text ("The question mark will be automaticaly added when the string\nis turned into a question. To print a question, press the\nAdd Question button and then the Print one. If you want to\nprint multiple questions, just write the first one, press\nthe Add Question button, repeat the process with the others\nand finally press the Print button. After printing, copy the\nline and paste it in the Tips and Thanks.\nThank you very much for your help!", "Los signos de pregunta serán agregados automáticamente\ncuando la línea se convierta en una pregunta. Para imprimir una\npregunta, presiona el botón de Agregar Pregunta y luego el\nde Imprimir. Si quieres imprimir más de una pregunta, escribe\nla primera, agrégala, repite el proceso con las demás preguntas\ny finalmente presiona el botón de Imprimir. Luego de imprimir la\npregunta, cópiala y pégala en la\npantalla de sugerencias y agradecimientos.\n¡Muchas gracias por tu ayuda!", 200, 325);
+var explanationParagraph = new Text ("The question mark will be automaticaly added when the string\nis turned into a question. To print a question, press the\nAdd Question button and then the Print one. If you want to\nprint multiple questions, just write the first one, press\nthe Add Question button, repeat the process with the others\nand finally press the Print button. After printing, copy the\nline and paste it in the Tips and Thanks.\nThank you very much for your help!", "Los signos de pregunta serán agregados automáticamente\ncuando la línea se convierta en una pregunta. Para imprimir una\npregunta, presiona el botón de Agregar Pregunta y luego el\nde Imprimir. Si quieres imprimir más de una pregunta, escribe\nla primera, agrégala, repite el proceso con las demás preguntas\ny finalmente presiona el botón de Imprimir. Luego de imprimir la\npregunta, cópiala y pégala en la\npantalla de sugerencias y agradecimientos.\n¡Muchas gracias por tu ayuda!", width/2, 13/16 * height);
 
 var backToMenuButton1 = new Button ({
-    x: 5,
-    y: 360,
-    width: 50,
-    height: 30,
+    x: width/80,
+    y: 9/10 * height,
+    width: width/8,
+    height: 3/40 * height,
     color: color(163, 163, 163),
     mouseOnButtonColor: color(168, 168, 168),
     text: ["Back to\nmenu", "Volver al\nmenú"],
@@ -510,11 +515,11 @@ var backToMenuButton1 = new Button ({
 });
 
 var printQuestionButton = new Button ({
-    x: 15,
-    y: 15,
-    width: 175,
+    x: 3/80 * width,
+    y: 3/80 * height,
+    width: 7/16 * width,
     textSize: 15,
-    height: 40,
+    height: height/10,
     text: ["PRINT", "IMPRIMIR"],
     color: color(163, 163, 163),
     stroke: color(0, 0, 0),
@@ -530,11 +535,11 @@ var printQuestionButton = new Button ({
 });
 
 var addQuestionButton = new Button ({
-    x: 210,
-    y: 15,
-    width: 175,
+    x: 21/40 * width,
+    y: 3/80 * height,
+    width: 7/16 * width,
     textSize: 15,
-    height: 40,
+    height: height/10,
     text: ["ADD QUESTION", "AGREGAR PREGUNTA"],
     color: color(163, 163, 163),
     stroke: color(0, 0, 0),
@@ -567,33 +572,33 @@ var description2 = new Rect ({
 });
 
 var flashButton = new Button ({
-    action: function () {subject = [["tvshows", "flash"], new Text ("TV Shows: Flash", "Series de Televisión: Flash", subjectButton.x + subjectButton.text.languages[currentLanguage].length * 10, subjectButton.y + 17)];
+    action: function () {subject = [["tvshows", "flash"], new Text ("TV Shows: Flash", "Series de Televisión: Flash", subjectButton.x + subjectButton.text.languages[currentLanguage].length * (width/40), subjectButton.y + (17/400 * height))];
     },
     text: ["Flash", "Flash"]
 });
 
 var starWarsButton = new Button ({
-    action: function () {subject = [["movies", "starwars"], new Text ("Movies: Star Wars", "Películas: Star Wars", subjectButton.x + subjectButton.text.languages[currentLanguage].length * 10, subjectButton.y + 17)];},
+    action: function () {subject = [["movies", "starwars"], new Text ("Movies: Star Wars", "Películas: Star Wars", subjectButton.x + subjectButton.text.languages[currentLanguage].length * (width/40), subjectButton.y + (17/400 * height))];},
     text: ["Star Wars", "Star Wars"]
 });
 
 var xMenButton = new Button ({
-    action: function () {subject = [["movies", "xmen"], new Text ("Movies: X-Men", "Películas: X-Men", subjectButton.x + subjectButton.text.languages[currentLanguage].length * 10, subjectButton.y + 17)];},
+    action: function () {subject = [["movies", "xmen"], new Text ("Movies: X-Men", "Películas: X-Men", subjectButton.x + subjectButton.text.languages[currentLanguage].length * (width/40), subjectButton.y + (17/400 * height))];},
     text: ["X-Men", "X-Men"]
 });
 
 var arrowButton = new Button ({
-    action: function () {subject = [["tvshows", "arrow"], new Text ("TV Shows: Arrow", "Series de Televisión: Arrow", subjectButton.x + subjectButton.text.languages[currentLanguage].length * 10, subjectButton.y + 17)];},
+    action: function () {subject = [["tvshows", "arrow"], new Text ("TV Shows: Arrow", "Series de Televisión: Arrow", subjectButton.x + subjectButton.text.languages[currentLanguage].length * (width/40), subjectButton.y + (17/400 * height))];},
     text: ["Arrow", "Arrow"]
 });
 
 var supernaturalButton = new Button ({
-    action: function () {subject = [["tvshows", "supernatural"], new Text ("TV Shows: Supernatural", "Series de Televisión: Supernatural", subjectButton.x + subjectButton.text.languages[currentLanguage].length * 10, subjectButton.y + 17)];},
+    action: function () {subject = [["tvshows", "supernatural"], new Text ("TV Shows: Supernatural", "Series de Televisión: Supernatural", subjectButton.x + subjectButton.text.languages[currentLanguage].length * (width/40), subjectButton.y + (17/400 * height))];},
     text: ["Supernatural", "Supernatural"]
 });
 
 var ouatButton = new Button ({
-    action: function () {subject = [["tvshows", "ouat"], new Text ("TV Shows: Once Upon a Time", "Series de Televisión: Once Upon a Time", subjectButton.x + subjectButton.text.languages[currentLanguage].length * 10, subjectButton.y + 17)];},
+    action: function () {subject = [["tvshows", "ouat"], new Text ("TV Shows: Once Upon a Time", "Series de Televisión: Once Upon a Time", subjectButton.x + subjectButton.text.languages[currentLanguage].length * (width/40), subjectButton.y + (17/400 * height))];},
     text: ["Once Upon a Time", "Once Upon a Time"]
 });
 
@@ -607,27 +612,27 @@ subjectButton.action = function () {subjectMenu.beingDrawn = true;};
 
 //After Answer Scenes
 {
-var congratulationsText = new Text ("Congratulations.\nYour answer is correct.", "Felicitaciones.\nTu respuesta es correcta.", 200, 100);
-var wrongAnswerText = new Text ("Your answer was wrong.\nCorrect Answer:\n", "Tu respuesta fue incorrecta.\nRespuesta Correcta:\n", 200, 100);
-var pointsText = new Text ("Points: 0", "Puntos: 0", 200, 200);
-var errorsText = new Text ("Errors: 0", "Errores: 0", 200, 270);
-var youLostText = new Text ("You Lost!\nCorrect Answer:\n", "¡Perdiste!\nRespuesta Correcta:\n", 200, 100);
+var congratulationsText = new Text ("Congratulations.\nYour answer is correct.", "Felicitaciones.\nTu respuesta es correcta.", width/2, height/4);
+var wrongAnswerText = new Text ("Your answer was wrong.\nCorrect Answer:\n", "Tu respuesta fue incorrecta.\nRespuesta Correcta:\n", width/2, height/4);
+var pointsText = new Text ("Points: 0", "Puntos: 0", width/2, height/2);
+var errorsText = new Text ("Errors: 0", "Errores: 0", width/2, 27/40 * height);
+var youLostText = new Text ("You Lost!\nCorrect Answer:\n", "¡Perdiste!\nRespuesta Correcta:\n", width/2, height/4);
 
 var resetGame = function () {
     points = 0;
     errors = 0;
     youLostText = new Text ("You Lost!\nCorrect Answer:\n", "¡Perdiste!\nRespuesta Correcta:\n", 200, 100);
-    errorsText = new Text ("Errors: 0", "Errores: 0", 200, 270);
-    pointsText = new Text ("Points: 0", "Puntos: 0", 200, 200);
-    wrongAnswerText = new Text ("Your answer was wrong.\nCorrect Answer:\n", "Tu respuesta fue incorrecta.\nRespuesta Correcta:\n", 200, 100);
+    errorsText = new Text ("Errors: 0", "Errores: 0", width/2, 27/40 * height);
+    pointsText = new Text ("Points: 0", "Puntos: 0", width/2, height/2);
+    wrongAnswerText = new Text ("Your answer was wrong.\nCorrect Answer:\n", "Tu respuesta fue incorrecta.\nRespuesta Correcta:\n", width/2, height/4);
 };
 var backToMenuButton2 = new Button ({
     text: ["Back To Menu", "Volver al menú"],
-    x: 25,
-    width: 150,
-    height: 50,
+    x: width/16,
+    width: 3/8 * width,
+    height: height/8,
     color: color(168, 168, 168),
-    y: 325,
+    y: 13/16 * height,
     textFont: impact,
     textColor: color(255, 255, 255),
     textSize: 21,
@@ -639,24 +644,24 @@ var backToMenuButton2 = new Button ({
 
 var playAgainButton = new Button ({
     text: ["Play Again", "Volver a Jugar"],
-    width: 150,
-    height: 50,
+    width: 3/8 * width,
+    height: height/8,
     color: color(168, 168, 168),
-    y: 325,
+    y: 13/16 * height,
     textFont: impact,
     textColor: color(255, 255, 255),
     textSize: 21,
     mouseOnButtonColor: color(176, 176, 176),
-    x: 225,
+    x: 9/16 * width,
     action: function () {currentScene = "selectQuestion";
     framesPassed = frameCount;
     resetGame();
     }
 });
 var nextQuestionButton = new Button ({
-    x: 110,
-    width: 180,
-    y: 318,
+    x: 11/40 * width,
+    width: 9/20 * width,
+    y: 159/200 * height,
     text: ["Next Question", "Siguiente Pregunta"],
     textColor: color(255, 255, 255),
     textFont: impact,
@@ -674,13 +679,13 @@ var nextQuestionButton = new Button ({
 var nextScene;
 var dontKnowThisButton = new Button ({
     text: ["I haven't seen this", "No he visto esto"],
-    x: 150,
-    y: 345,
+    x: 3/8 * width,
+    y: 69/80 * height,
     textSize: 11,
-    width: 100,
+    width: width/4,
     stroke: color(166, 166, 166),
     color: color(255, 255, 255),
-    height: 35,
+    height: 7/80 * height,
     action: function () {
         unseenShows.push(currentQuestion.subject[1]);
         if (unseenShows.length < 6) {
@@ -715,12 +720,12 @@ var answers = [];
 for (var i = 0; i < 4; i++) {
     answers.push(new Button({
         text: [],
-        y: 215 + i * 30,
+        y: (43/80 + i * 3/40) * height,
         textSize: 11,
-        width: 380,
-        height: 20,
+        width: 19/20 * width,
+        height: height/20,
         color: color(255, 255, 255),
-        x: 10,
+        x: width/40,
         stroke: color(166, 166, 166),
         mouseOnButtonColor: color(219, 219, 219)
     }));
@@ -740,7 +745,7 @@ answers[1].action = function () {
     errors++;
     if (errors === 3) {
         nextScene = "youLost";
-        pointsText = new Text ("Final Points: " + points, "Puntuación Final: " + points, 200, 260);
+        pointsText = new Text ("Final Points: " + points, "Puntuación Final: " + points, width/2, 13/20 * height);
         youLostText.languages[0] = youLostText.languages[0].concat(currentQuestion.correctAnswer[0]);
         youLostText.languages[1] = youLostText.languages[1].concat(currentQuestion.correctAnswer[1]);
     }
@@ -767,7 +772,7 @@ answers[2].action = function () {
     errors++;
     if (errors === 3) {
         nextScene = "youLost";
-        pointsText = new Text ("Final Points: " + points, "Puntuación Final: " + points, 200, 260);
+        pointsText = new Text ("Final Points: " + points, "Puntuación Final: " + points, width/2, 13/40 * height);
         youLostText.languages[0] = youLostText.languages[0].concat(currentQuestion.correctAnswer[0]);
         youLostText.languages[1] = youLostText.languages[1].concat(currentQuestion.correctAnswer[1]);
     }
@@ -795,7 +800,7 @@ answers[3].action = function () {
     errors++;
     if (errors === 3) {
         nextScene = "youLost";
-        pointsText = new Text ("Final Points: " + points, "Puntuación Final: " + points, 200, 260);
+        pointsText = new Text ("Final Points: " + points, "Puntuación Final: " + points, width/2, 13/40 * height);
         youLostText.languages[0] = youLostText.languages[0].concat(currentQuestion.correctAnswer[0]);
         youLostText.languages[1] = youLostText.languages[1].concat(currentQuestion.correctAnswer[1]);
     }
@@ -820,19 +825,19 @@ answers[3].action = function () {
 
 //Select Question Scene
 {
-var selectingQuestionMessage = new Text ("Selecting question.\nPlease wait.", "Seleccionando pregunta.\nPor favor espera.", 200, 200);
+var selectingQuestionMessage = new Text ("Selecting question.\nPlease wait.", "Seleccionando pregunta.\nPor favor espera.", width/2, height/2);
 }
 
 //Rules Scene
 {
-var rulesTitleText = new Text ("HOW TO PLAY", "CÓMO JUGAR", 200, 50);
-var rulesText = new Text ("The goal of the game is to get as many\npoints as possible. You get a point\nevery time you answer a question\ncorrectly. You lose once you've made\nthree mistakes.\n\nIf you don't know the subject of\na question, just press the button that\nsays 'I haven't seen this'.", "El objetivo del juego es obtener tantos\npuntos como puedas. Obtienes un\npunto cada vez que respondes una\npregunta correctamente. Pierdes\ncuando cometes tres errores.\n\nSi no conoces el tema de una\npregunta, presiona el botón que\ndice 'No he visto esto'.", 200, 200);
+var rulesTitleText = new Text ("HOW TO PLAY", "CÓMO JUGAR", width/2, height/8);
+var rulesText = new Text ("The goal of the game is to get as many\npoints as possible. You get a point\nevery time you answer a question\ncorrectly. You lose once you've made\nthree mistakes.\n\nIf you don't know the subject of\na question, just press the button that\nsays 'I haven't seen this'.", "El objetivo del juego es obtener tantos\npuntos como puedas. Obtienes un\npunto cada vez que respondes una\npregunta correctamente. Pierdes\ncuando cometes tres errores.\n\nSi no conoces el tema de una\npregunta, presiona el botón que\ndice 'No he visto esto'.", width/2, height/2);
 var backToMenuButton3 = new Button ({
     text: ["Back To Menu", "Volver al Menú"],
-    x: 110,
-    width: 170,
-    y: 335,
-    height: 40,
+    x: 11/40 * width,
+    width: 17/40 * width,
+    y: 67/80 * height,
+    height: height/10,
     color: color(129, 139, 230),
     mouseOnButtonColor: color(139, 149, 230),
     textSize: 17,
@@ -871,7 +876,7 @@ var scenes = ({
                     answers[i].text = new Text (currentQuestion.answers[currentQuestion.possibleIndexes[0]][0], currentQuestion.answers[currentQuestion.possibleIndexes[0]][1]);
                     currentQuestion.possibleIndexes.shift();
                 }
-                answers[i].y = 215 + i * 30;
+                answers[i].y = (43/80 + i * 3/40) * height;
             }
             
             questionSelected = true;
@@ -918,10 +923,10 @@ var scenes = ({
         noLoop();
         background(187, 255, 173);
         fill(44, 122, 27); 
-        textSize(33);
+        textSize(33/800 * (width + height));
         textAlign(CENTER, CENTER);
         gameTitle.draw();
-        textSize(27);
+        textSize(27/800 * (width + height));
         gameDescription.draw();
         playButton.draw();
         rulesButton.draw();
@@ -963,7 +968,7 @@ var scenes = ({
                 questionVariables[i][currentLanguage] = questionVariables[i][currentLanguage].substring(0, questionVariables[i][currentLanguage].length - 1);
             }
             textAlign(LEFT, LEFT);
-            text(questionVariables[i][currentLanguage], questionButtons[i].x + questionStrings[i][currentLanguage].length * 7.5, questionButtons[i].y + 17);
+            text(questionVariables[i][currentLanguage], questionButtons[i].x + questionStrings[i][currentLanguage].length * (7.5/400 * width), questionButtons[i].y + (17/400 * height));
         }
         
         if (subject[1] !== undefined) {
@@ -1221,3 +1226,4 @@ keyPressed = function () {
         }
     }
 };
+}
