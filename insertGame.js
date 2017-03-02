@@ -1,4 +1,4 @@
-$.get("https://raw.githubusercontent.com/Larpee/The-Khan-Quiz/master/game.js", function (game) {
+$.get("https://rawgit.com/Larpee/The-Khan-Quiz/master/game.js", function (game) {
     var sketchProc = function (processingInstance) {
         with (processingInstance) {
             size(400, 400);
@@ -10,4 +10,4 @@ $.get("https://raw.githubusercontent.com/Larpee/The-Khan-Quiz/master/game.js", f
     var canvas = document.getElementById("game");
 
     var processingInstance = new Processing(canvas, sketchProc);
-  });
+});
