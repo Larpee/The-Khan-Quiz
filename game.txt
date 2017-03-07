@@ -748,6 +748,22 @@ answers[1].action = function () {
         pointsText = new Text ("Final Points: " + points, "Puntuación Final: " + points, width/2, 13/20 * height);
         youLostText.languages[0] = youLostText.languages[0].concat(currentQuestion.correctAnswer[0]);
         youLostText.languages[1] = youLostText.languages[1].concat(currentQuestion.correctAnswer[1]);
+        var highscores = loadStrings("https://rawgit.com/Larpee/The-Khan-Quiz/master/highscores.txt");
+        
+        var biggestMatch = findBiggestMatch(highscores, points);
+        
+        if (biggestMatch !== false) {
+            if (biggestMatch === highscores.length - 1) {
+                highscores[highscores.length - 1] = points.toStr();
+            }
+            
+            else {
+                highscores.splice(biggestMatch, 0, points.toStr());
+                highscores.pop();
+            }
+            
+            saveStrings("https://rawgit.com/Larpee/The-Khan-Quiz/master/highscores.txt", highscores);
+        }
     }
     
     else {
@@ -775,6 +791,18 @@ answers[2].action = function () {
         pointsText = new Text ("Final Points: " + points, "Puntuación Final: " + points, width/2, 13/40 * height);
         youLostText.languages[0] = youLostText.languages[0].concat(currentQuestion.correctAnswer[0]);
         youLostText.languages[1] = youLostText.languages[1].concat(currentQuestion.correctAnswer[1]);
+        if (biggestMatch !== false) {
+            if (biggestMatch === highscores.length - 1) {
+                highscores[highscores.length - 1] = points.toStr();
+            }
+            
+            else {
+                highscores.splice(biggestMatch, 0, points.toStr());
+                highscores.pop();
+            }
+            
+            saveStrings("https://rawgit.com/Larpee/The-Khan-Quiz/master/highscores.txt", highscores);
+        }
     }
     
     else {
@@ -803,6 +831,18 @@ answers[3].action = function () {
         pointsText = new Text ("Final Points: " + points, "Puntuación Final: " + points, width/2, 13/40 * height);
         youLostText.languages[0] = youLostText.languages[0].concat(currentQuestion.correctAnswer[0]);
         youLostText.languages[1] = youLostText.languages[1].concat(currentQuestion.correctAnswer[1]);
+        if (biggestMatch !== false) {
+            if (biggestMatch === highscores.length - 1) {
+                highscores[highscores.length - 1] = points.toStr();
+            }
+            
+            else {
+                highscores.splice(biggestMatch, 0, points.toStr());
+                highscores.pop();
+            }
+            
+            saveStrings("https://rawgit.com/Larpee/The-Khan-Quiz/master/highscores.txt", highscores);
+        }
     }
     
     else {
