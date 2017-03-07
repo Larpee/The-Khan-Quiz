@@ -1,0 +1,4 @@
+var draw = function () {
+    fill(255, 0, 0);
+    ellipse(200, 200, 100, 100);
+};
