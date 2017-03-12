@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div id="game-window">
+		<h5 id="game-title">TST Quiz</h5>
+		<div id="floater"></div> <!-- Floater used to vertically align element below -->
+        <canvas id="game"></canvas>
+    </div>
+</body>
+
+<!-- Pre tag included to prevent Wordpress from formatting scripts -->
+<pre>
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+<!-- Setting width of #game-window equal to its auto value plus a fixed amount of pixels -->
+<script>
+var $gameWindow = $("#game-window");
+$gameWindow.css("width", parseInt($gameWindow.css("width")) + 100 + "px");
+</script>
+
+<!-- Processing.js -->
+<script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script>
+
+<!-- Load TST Quiz -->
+<script>
+
+$.ajax({
+	url: "https://rawgit.com/Larpee/The-Khan-Quiz/master/game.js",
+	success: function (script) {
+		var sketchProc = function (processingInstance) {
+			with (processingInstance) {
+				size(400, 400);
+				frameRate(30);
+				eval(script);
+			}
+		};
+
+		var canvas = document.getElementById("game");
+		var processingInstance = new Processing(canvas, sketchProc);
+	},
+	dataType: "text"
+});
+
+</script>
+
+
+</pre>
+</html>
