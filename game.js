@@ -203,7 +203,7 @@ for (var i = 0; i < 4; i++) {
 var questionRect = new Rect ({
     y: 19/80 * height,
     height: height/3,
-    textSize: 19/800 * (width + height)
+    textSize: 16/800 * (width + height)
 });
 
 }
@@ -420,3 +420,4 @@ mouseMoved = function () {
 mouseClicked = function () {
     scenes[currentScene].mouseClicked();
 };
+
