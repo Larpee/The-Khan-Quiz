@@ -4,12 +4,13 @@
 }
 
 .canvas-wrapper {
-    width: 100vw;
-    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: red;
+    position: relative;
+    top: -100px;
+    left: 0px;
 }
 
 .canvas {
