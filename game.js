@@ -1,10 +1,10 @@
 var currentScene = "menu";
 var points = 0;
 var errors = 0;
-var correctAnswerToQuestion; // Var to store the correct answer to questions so that it can be displayed
 var questions = [];
 var usedQuestions = [];
 var questionSelected = false;
+var finishedQuestions = [];
 
 var sortArray = function (array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
@@ -107,6 +107,12 @@ var Question = function (question, correctAnswer, answer1, answer2, answer3) {
     this.correctAction = function () {
         points++;
         currentScene = "correctAnswer";
+        finishedQuestions.push(questions[0]);
+        questions.splice(0, 1);
+        
+        if (questions.length === 0 && usedQuestions.length === 0) {
+            currentScene = "youWon";
+        }
     };
     
     this.incorrectAction = function () {
@@ -119,6 +125,9 @@ var Question = function (question, correctAnswer, answer1, answer2, answer3) {
         else {
             currentScene = "wrongAnswer";
         }
+        
+        usedQuestions.push(questions[0]);
+        questions.splice(0, 1);
     };
 };
 
@@ -213,11 +222,15 @@ var questionRect = new Rect ({
 var reset = function () {
     points = 0;
     errors = 0;
-    correctAnswerToQuestion = undefined;
-    for (var i = 0; i < usedQuestions.length; i++) {
+    for (var i = 0; i < finishedQuestions.length; i++) {
+        questions.push(finishedQuestions[i]);
+    }
+    
+    for (var i = 0;i < usedQuestions.length; i++) {
         questions.push(usedQuestions[i]);
     }
     usedQuestions = [];
+    finishedQuestions = [];
     questions = sortArray(questions);
 };
 }
@@ -268,9 +281,6 @@ var scenes = {
                 }
                 
                 questions[0].prepare(answerButtons, questionRect);
-                correctAnswerToQuestion = questions[0].correctAnswer;
-                usedQuestions.push(questions[0]);
-                questions.splice(0, 1);
                 questionSelected = true;
                 framesPassed = frameCount;
             }
@@ -330,10 +340,9 @@ var scenes = {
             textSize(33/800 * (width + height));
             text("¡Respuesta Incorrecta!", width/2, 7/40 * height);
             
-            textSize(11/400 * (width + height));
-            text("Respuesta Correcta:\n" + correctAnswerToQuestion, width/2, 2/5 * height);
-            text("Puntos: " + points, width/2, 9/16 * height);
-            text("Errores: " + errors, width/2, 11/16 * height);
+            textSize(12/400 * (width + height));
+            text("Puntos: " + points, width/2, 35/80 * height);
+            text("Errores: " + errors, width/2, 3/5 * height);
         },
         mouseMoved: function () {
             buttonActions.mouseOn(this.buttons);
@@ -367,12 +376,11 @@ var scenes = {
             buttonActions.draw(this.buttons);
             
             textAlign(CENTER, CENTER);
-            textSize(19/400 * (width + height));
-            text("¡Perdiste!", width/2, 3/20 * height);
+            textSize(1/20 * (width + height));
+            text("¡Perdiste!", width/2, 3/16 * height);
             
-            textSize(1/32 * (width + height));
-            text("Respuesta Correcta:\n" + correctAnswerToQuestion, width/2, 3/8 * height);
-            text("Puntos: " + points, width/2, 23/40 * height);
+            textSize(1/26 * (width + height));
+            text("Puntos: " + points, width/2, 9/20 * height);
             
         },
         mouseMoved: function () {
@@ -405,6 +413,30 @@ var scenes = {
         mouseClicked: function () {
             buttonActions.handleClick(this.buttons);
         }
+    },
+    youWon: {
+        buttons: [new Button ({
+                text: "Volver a Jugar",
+                y: 3/4 * height,
+                action: function () {
+                    reset();
+                    currentScene = "selectQuestion";
+                }
+            })],
+        draw: function () {
+            back();
+            buttonActions.draw(this.buttons);
+            textAlign(CENTER, CENTER);
+            textSize(20);
+            fill(0, 0, 0);
+            text("¡Felicitaciones!\n¡Ganaste!", width/2, height/4);
+        },
+        mouseMoved: function () {
+            buttonActions.mouseOn(this.buttons);
+        },
+        mouseClicked: function () {
+            buttonActions.handleClick(this.buttons);
+        }
     }
 };
 
@@ -420,4 +452,5 @@ mouseMoved = function () {
 mouseClicked = function () {
     scenes[currentScene].mouseClicked();
 };
+
 
