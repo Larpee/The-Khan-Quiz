@@ -1,6 +1,3 @@
-var highscores = loadStrings("http://todosobretenis.com/wp-content/uploads/2017/04/highscores.txt");
-println("hello");
-
 var currentScene = "menu";
 var points = 0;
 var errors = 0;
