@@ -235,6 +235,27 @@ var reset = function () {
 };
 }
 
+// Final Scenes
+var handleHighscores = function () {
+  var highscores = loadStrings("http://todosobretenis.com/wp-content/uploads/2017/04/highscores.txt");
+  
+  if (points > highscores[highscores.length - 1]) {
+  var orderedScores = [];
+  var scores = [];
+  for (var i = 0; i < highscores.length/2; i += 2) {
+    orderedScores.push([highscores[i], highscores[i + 1]]);
+  }
+  
+  orderedScores.push(["User", points]);
+  orderedScores.sort(function (a, b) {return b[1]-a[1];});
+  orderedScores.pop();
+    
+  var highscores = [].concat.apply([], orderedScores);
+    
+  saveStrings("http://todosobretenis.com/wp-content/uploads/2017/04/highscores.txt", highscores);
+  }
+};
+
 var scenes = {
     menu: {
         buttons: [
@@ -381,6 +402,8 @@ var scenes = {
             
             textSize(1/26 * (width + height));
             text("Puntos: " + points, width/2, 9/20 * height);
+          
+            handleHighscores();
             
         },
         mouseMoved: function () {
@@ -430,6 +453,8 @@ var scenes = {
             textSize(20);
             fill(0, 0, 0);
             text("¡Felicitaciones!\n¡Ganaste!", width/2, height/4);
+          
+            handleHighscores();
         },
         mouseMoved: function () {
             buttonActions.mouseOn(this.buttons);
