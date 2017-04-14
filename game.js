@@ -7,7 +7,7 @@
  * 3) Si no consiguió puntaje alto, mandarlo a "youWon" o "youLost"
 ******/
 
-var currentScene = "typing";
+var currentScene = "menu";
 var points = 0;
 var errors = 0;
 var questions = [];
@@ -17,8 +17,9 @@ var finishedQuestions = [];
 var typingName = false;
 var name = "";
 var forbiddenKeys = "8 10 112 113 114 115 116 117 118 119 120 121 122 123 16 17 18 20";
-var highscores;
+var highscores = [];
 var highscoresLoaded = false;
+var orderedScores = [];
 
 var sortArray = function (array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
@@ -267,20 +268,19 @@ var reset = function () {
 
 // Final Scenes
 var handleHighscores = function () {
-  var orderedScores = [];
-  var scores = [];
-  for (var i = 0; i < highscores.length/2; i += 2) {
-    orderedScores.push([highscores[i], highscores[i + 1]]);
-  }
+    var scores = [];
+    for (var i = 0; i < highscores.length/2; i += 2) {
+        orderedScores.push([highscores[i], highscores[i + 1]]);
+    }
   
-  orderedScores.push([name, points]);
-  orderedScores.sort(function (a, b) {return b[1]-a[1];});
-  orderedScores.pop();
-    
-  var highscores = [].concat.apply([], orderedScores);
+    orderedScores.push([name, points]);
+    orderedScores.sort(function (a, b) {return b[1]-a[1];});
+    orderedScores.pop();
   
-  currentScene = "highscores";
-  saveStrings("http://todosobretenis.com/wp-content/uploads/2017/04/highscores.txt", highscores);
+    var highscores = [].concat.apply([], orderedScores);
+  
+    name = "";
+    saveStrings("http://todosobretenis.com/wp-content/uploads/2017/04/highscores.txt", highscores);
 };
 
 var scenes = {
@@ -429,8 +429,6 @@ var scenes = {
             
             textSize(1/26 * (width + height));
             text("Puntos: " + points, width/2, 9/20 * height);
-          
-            handleHighscores();
             
         },
         mouseMoved: function () {
@@ -480,8 +478,6 @@ var scenes = {
             textSize(20);
             fill(0, 0, 0);
             text("¡Felicitaciones!\n¡Ganaste!", width/2, height/4);
-          
-            handleHighscores();
         },
         mouseMoved: function () {
             buttonActions.mouseOn(this.buttons);
@@ -490,7 +486,6 @@ var scenes = {
             buttonActions.handleClick(this.buttons);
         }
     },
-    
     typing: {
         buttons: [
             new Button ({
@@ -506,7 +501,7 @@ var scenes = {
                 action: function () {
                     typingName = false;
                     handleHighscores();
-                    currentScene = "highscores";
+                    currentScene = "menu";
                 }
             })
         ],
@@ -533,10 +528,32 @@ var scenes = {
             buttonActions.handleClick(this.buttons);
         }
     },
-    
     highscores: {
-        buttons: [],
-        draw: function () {},
+        buttons: [
+            new Button ({
+                text: "Volver al Menú",
+                action: function () {
+                    reset();
+                    currentScene = "menu";
+                },
+                y: 360
+            })
+        ],
+        draw: function () {
+            back();
+            buttonActions.draw(this.buttons);
+            
+            textAlign(CENTER, CENTER);
+            textSize(20);
+            
+            if (highscoresLoaded) {
+                for (var i = 0; i < orderedScores.length; i++) {
+                    var currentScore = orderedScores[i];
+                    
+                    text(i + ") " + currentScore[0] + ": " + currentScore[1], width/2, 130 + i * 30);
+                }
+            }
+        },
         mouseMoved: function () {},
         mouseClicked: function () {}
     }
