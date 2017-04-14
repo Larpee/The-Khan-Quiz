@@ -1,10 +1,24 @@
-var currentScene = "menu";
+/******
+ * 1) Jugador termina (pierde o gana)
+ * 2) Revisar si consiguió puntaje alto
+ * 3) Si consiguió puntaje alto, mandarlo a escribir su nombre
+ * 4) Cuando escribió su nombre, mostrarle los puntajes altos
+
+ * 3) Si no consiguió puntaje alto, mandarlo a "youWon" o "youLost"
+******/
+
+var currentScene = "typing";
 var points = 0;
 var errors = 0;
 var questions = [];
 var usedQuestions = [];
 var questionSelected = false;
 var finishedQuestions = [];
+var typingName = false;
+var name = "";
+var forbiddenKeys = "8 10 112 113 114 115 116 117 118 119 120 121 122 123 16 17 18 20";
+var highscores;
+var highscoresLoaded = false;
 
 var sortArray = function (array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
@@ -23,6 +37,20 @@ var sortArray = function (array) {
   }
 
   return array;
+};
+
+var handleScore = function (action) {
+    highscoresLoaded = true;
+    
+    highscores = loadStrings("http://todosobretenis.com/wp-content/uploads/2017/04/highscores.txt");
+    
+    if (highscores[highscores.length - 1] < points) {
+        currentScene = "typing";
+    }
+    
+    else {
+        action();
+    }
 };
 
 var Rect = function (config) {
@@ -111,7 +139,7 @@ var Question = function (question, correctAnswer, answer1, answer2, answer3) {
         questions.splice(0, 1);
         
         if (questions.length === 0 && usedQuestions.length === 0) {
-            currentScene = "youWon";
+            handleScore(function () {currentScene = "youWon";});
         }
     };
     
@@ -119,7 +147,7 @@ var Question = function (question, correctAnswer, answer1, answer2, answer3) {
         errors++;
         
         if (errors === 3) {
-            currentScene = "youLost";
+            handleScore(function () {currentScene = "youLost";});
         }
         
         else {
@@ -232,28 +260,27 @@ var reset = function () {
     usedQuestions = [];
     finishedQuestions = [];
     questions = sortArray(questions);
+    
+    highscoresLoaded = false;
 };
 }
 
 // Final Scenes
 var handleHighscores = function () {
-  var highscores = loadStrings("http://todosobretenis.com/wp-content/uploads/2017/04/highscores.txt");
-  
-  if (points > highscores[highscores.length - 1]) {
   var orderedScores = [];
   var scores = [];
   for (var i = 0; i < highscores.length/2; i += 2) {
     orderedScores.push([highscores[i], highscores[i + 1]]);
   }
   
-  orderedScores.push(["User", points]);
+  orderedScores.push([name, points]);
   orderedScores.sort(function (a, b) {return b[1]-a[1];});
   orderedScores.pop();
     
   var highscores = [].concat.apply([], orderedScores);
-    
+  
+  currentScene = "highscores";
   saveStrings("http://todosobretenis.com/wp-content/uploads/2017/04/highscores.txt", highscores);
-  }
 };
 
 var scenes = {
@@ -462,6 +489,56 @@ var scenes = {
         mouseClicked: function () {
             buttonActions.handleClick(this.buttons);
         }
+    },
+    
+    typing: {
+        buttons: [
+            new Button ({
+                y: 23/40 * height,
+                action: function () {
+                    typingName = true;
+                }
+            }),
+            new Button ({
+                text: "Listo",
+                y: 7/8 * height,
+                width: width/2,
+                action: function () {
+                    typingName = false;
+                    handleHighscores();
+                    currentScene = "highscores";
+                }
+            })
+        ],
+        
+        draw: function () {
+            background(255, 255, 255, 50);
+            buttonActions.draw(this.buttons);
+            
+            textAlign(CENTER, CENTER);
+            textSize(3/80 * (width + height));
+            text("¡Entraste en los 5\npuntajes más altos!", width/2, 75);
+            
+            textSize((width + height) / 32);
+            text("Ingresá tu nombre:", width/2, 9/20 * height);
+            
+            textSize((width + height) / 40);
+            fill(0, 0, 0);
+            text(name, width/2, 23/40 * height);
+        },
+        mouseMoved: function () {
+            this.buttons[1].onButton();
+        },
+        mouseClicked: function () {
+            buttonActions.handleClick(this.buttons);
+        }
+    },
+    
+    highscores: {
+        buttons: [],
+        draw: function () {},
+        mouseMoved: function () {},
+        mouseClicked: function () {}
     }
 };
 
@@ -477,5 +554,20 @@ mouseMoved = function () {
 mouseClicked = function () {
     scenes[currentScene].mouseClicked();
 };
+
+keyPressed = function () {
+    if (typingName) {
+        if (keyCode === 8) {
+            if (name.length > 0) {
+                name = name.substr(0, name.length - 1);
+            }
+        }
+        
+        if (name.length < 30 && forbiddenKeys.indexOf(keyCode) === -1){
+            name += key.toString();
+        }
+    }
+};
+
 
 
