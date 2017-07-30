@@ -1,12 +1,3 @@
-/******
- * 1) Jugador termina (pierde o gana)
- * 2) Revisar si consiguió puntaje alto
- * 3) Si consiguió puntaje alto, mandarlo a escribir su nombre
- * 4) Cuando escribió su nombre, mostrarle los puntajes altos
-
- * 3) Si no consiguió puntaje alto, mandarlo a "youWon" o "youLost"
-******/
-
 var currentScene = "menu";
 var points = 0;
 var errors = 0;
@@ -14,13 +5,8 @@ var questions = [];
 var usedQuestions = [];
 var questionSelected = false;
 var finishedQuestions = [];
-var typingName = false;
-var name = "";
-var forbiddenKeys = "8 10 112 113 114 115 116 117 118 119 120 121 122 123 16 17 18 20";
-var highscores = [];
-var highscoresLoaded = false;
-var orderedScores = [];
 
+size(400, 400, 0);
 var sortArray = function (array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -40,20 +26,6 @@ var sortArray = function (array) {
   return array;
 };
 
-var handleScore = function (action) {
-    highscoresLoaded = true;
-    
-    highscores = loadStrings("http://todosobretenis.com/wp-content/uploads/2017/04/highscores.txt");
-    
-    if (highscores[highscores.length - 1] < points) {
-        currentScene = "typing";
-    }
-    
-    else {
-        action();
-    }
-};
-
 var Rect = function (config) {
     this.x = config.x || width/2;
     this.y = config.y;
@@ -63,7 +35,7 @@ var Rect = function (config) {
     this.fill = config.fill || color(255, 255, 255);
     this.text = config.text;
     this.textColor = config.textColor || color(0, 0, 0);
-    this.textSize = config.textSize || 17/800 * (width + height);
+    this.textSize = config.textSize || 16/800 * (width + height);
 };
 
 Rect.prototype.draw = function() {
@@ -140,7 +112,7 @@ var Question = function (question, correctAnswer, answer1, answer2, answer3) {
         questions.splice(0, 1);
         
         if (questions.length === 0 && usedQuestions.length === 0) {
-            handleScore(function () {currentScene = "youWon";});
+            currentScene = "youWon";
         }
     };
     
@@ -148,7 +120,7 @@ var Question = function (question, correctAnswer, answer1, answer2, answer3) {
         errors++;
         
         if (errors === 3) {
-            handleScore(function () {currentScene = "youLost";});
+            currentScene = "youLost";
         }
         
         else {
@@ -183,16 +155,15 @@ Question.make = function (question) {
     return newQuestion;
 };
 
-questions = [ ["¿Quiénes conforman el Big Four?", "Federer, Murray, Nadal y Djokovic", "Federer, Nadal, Djokovic y Wawrinka", "Wawrinka, Murray, Federer y Djokovic", "Djokovic, Del Potro, Nadal Y Federer"], ["¿Cuántos Grand Slams ganó Roger Federer?", "18", "16", "17", "15"], ["¿Cuál de los cuatro Grand Slams se creó primero?", "Wimbledon", "Roland Garros", "Australian Open", "US Open"], ["¿Cuál fue el primer argentino que logró ganar un Grand Slam?", "Guillermo Vilas", "José Luis Clerc", "Martín Jaite", "Juan Martín del Potro"], ["¿Qué país ganó más ediciones de la Copa Davis?", "Estados Unidos", "Francia", "Inglaterra", "España"], ["¿A qué país le ganó Argentina la final de la Copa Davis en 2016?", "Croacia", "Italia", "Serbia", "Suiza"]];
+questions = [["¿Quiénes conforman el Big Four?", "Federer, Murray, Nadal y Djokovic", "Federer, Nadal, Djokovic y Wawrinka", "Wawrinka, Murray, Federer y Djokovic", "Djokovic, Del Potro, Nadal y Federer"], ["¿Cuántos Grand Slams ganó Roger Federer?", "18", "16", "17", "15"], ["¿Cuál de los cuatro Grand Slams se creó primero?", "Wimbledon", "Roland Garros", "Australian Open", "US Open"], ["¿Cuál fue el primer argentino que logró ganar un Grand Slam?", "Guillermo Vilas", "José Luis Clerc", "Martín Jaite", "Juan Martín del Potro"], ["¿Qué país ganó más ediciones de la Copa Davis?", "Estados Unidos", "Francia", "Inglaterra", "España"], ["¿A qué país le ganó Argentina la final de la Copa Davis en 2016?", "Croacia", "Italia", "Serbia", "Suiza"], ["¿Cuántas veces ganó Federer el Roland Garros?", "1", "3", "4", "Ninguna opción es correcta"],  ["¿En qué ciudad se juega actualmente el ATP World Tour Finals?", "Londres", "Zurich", "Tokio", "Ninguna opción es correcta"], ["¿Cómo apodaban a Juan Ignacio Chela?", "El flaco", "El gordo", "La torre", "Ninguna opción es correcta"], ["¿En qué año Rafael Nadal ganó por primera vez Wimbledon?", "2008", "2006", "2007", "Ninguna opción es correcta"], ["¿Qué Grand Slam tiene el estadio de tenis más grande del mundo?", "US Open", "Australian Open", "Wimbledon", "Ninguna opción es correcta"], ["¿Con qué equipo Argentina logró vencer a Croacia en la final de la Copa Davis 2016?", "Del Potro, Delbonis, Pella y Mayer", "Del Potro, Delbonis, Olivo y Mayer", "Del Potro, Monaco, Berlocq y Olivo", "Ninguna opción es correcta"], ["¿Quién declaró que Rafael Nadal, luego de perder un partido en Buenos Aires, rompió siete raquetas?", "Gastón Gaudio", "Guillermo Coria", "David Ferrer", "Ninguna opción es correcta"], ["¿Qué jugadores consiguieron llegar a la cima del ranking ATP tanto en singles como en dobles?", "John McEnroe y Stefan Edberg", "Mike y Bob Brian", "Andre Agassi y Pete Sampras", "Ninguna opción es correcta"], ["¿Cuánto duró el partido de tenis más largo de la historia (John Isner y Nicolás Mahut en Wimbledon)?", "11h 5m", "12h 5m", "13h 5m", "Ninguna opción es correcta"], ["¿Quién es el único tenista que logró ser el N°1 del mundo, pero no consiguió ganar ningún Grand Slam?", "Marcelo Ríos", "Manolo Santana", "Iván Lendl", "Ninguna opción es correcta"]];
 
 questions = sortArray(questions);
-
 /******************
 | Vars for Scenes |
 ******************/
 // Function to quickly draw background
 var back = function () {
-    background(14, 166, 0);
+    background(255, 162, 0);
 };
 
 
@@ -261,27 +232,11 @@ var reset = function () {
     usedQuestions = [];
     finishedQuestions = [];
     questions = sortArray(questions);
-    
-    highscoresLoaded = false;
 };
 }
 
 // Final Scenes
-var handleHighscores = function () {
-    var scores = [];
-    for (var i = 0; i < highscores.length/2; i += 2) {
-        orderedScores.push([highscores[i], highscores[i + 1]]);
-    }
-  
-    orderedScores.push([name, points]);
-    orderedScores.sort(function (a, b) {return b[1]-a[1];});
-    orderedScores.pop();
-  
-    var highscores = [].concat.apply([], orderedScores);
-  
-    name = "";
-    saveStrings("http://todosobretenis.com/wp-content/uploads/2017/04/highscores.txt", highscores);
-};
+
 
 var scenes = {
     menu: {
@@ -485,77 +440,6 @@ var scenes = {
         mouseClicked: function () {
             buttonActions.handleClick(this.buttons);
         }
-    },
-    typing: {
-        buttons: [
-            new Button ({
-                y: 23/40 * height,
-                action: function () {
-                    typingName = true;
-                }
-            }),
-            new Button ({
-                text: "Listo",
-                y: 7/8 * height,
-                width: width/2,
-                action: function () {
-                    typingName = false;
-                    handleHighscores();
-                    currentScene = "menu";
-                }
-            })
-        ],
-        
-        draw: function () {
-            background(255, 255, 255, 50);
-            buttonActions.draw(this.buttons);
-            
-            textAlign(CENTER, CENTER);
-            textSize(3/80 * (width + height));
-            text("¡Entraste en los 5\npuntajes más altos!", width/2, 75);
-            
-            textSize((width + height) / 32);
-            text("Ingresá tu nombre:", width/2, 9/20 * height);
-            
-            textSize((width + height) / 40);
-            fill(0, 0, 0);
-            text(name, width/2, 23/40 * height);
-        },
-        mouseMoved: function () {
-            this.buttons[1].onButton();
-        },
-        mouseClicked: function () {
-            buttonActions.handleClick(this.buttons);
-        }
-    },
-    highscores: {
-        buttons: [
-            new Button ({
-                text: "Volver al Menú",
-                action: function () {
-                    reset();
-                    currentScene = "menu";
-                },
-                y: 360
-            })
-        ],
-        draw: function () {
-            back();
-            buttonActions.draw(this.buttons);
-            
-            textAlign(CENTER, CENTER);
-            textSize(20);
-            
-            if (highscoresLoaded) {
-                for (var i = 0; i < orderedScores.length; i++) {
-                    var currentScore = orderedScores[i];
-                    
-                    text(i + ") " + currentScore[0] + ": " + currentScore[1], width/2, 130 + i * 30);
-                }
-            }
-        },
-        mouseMoved: function () {},
-        mouseClicked: function () {}
     }
 };
 
@@ -571,20 +455,4 @@ mouseMoved = function () {
 mouseClicked = function () {
     scenes[currentScene].mouseClicked();
 };
-
-keyPressed = function () {
-    if (typingName) {
-        if (keyCode === 8) {
-            if (name.length > 0) {
-                name = name.substr(0, name.length - 1);
-            }
-        }
-        
-        if (name.length < 30 && forbiddenKeys.indexOf(keyCode) === -1){
-            name += key.toString();
-        }
-    }
-};
-
-
 
