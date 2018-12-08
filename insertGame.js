@@ -1,4 +1,4 @@
-$.get("https://rawgit.com/Larpee/The-Khan-Quiz/master/game.js", function (game) {
+$.get("https://cdn.jsdelivr.net/gh/Larpee/The-Khan-Quiz@master/game.js", function (game) {
     var sketchProc = function (processingInstance) {
         with (processingInstance) {
             size(400, 400);
